@@ -7,12 +7,12 @@ import {
   useLoaderData,
   useTransition,
 } from "@remix-run/react";
-import { getPost, updatePost } from "~/models/post.server";
+import { deletePost, getPost, updatePost } from "~/models/post.server";
 import type { Post } from "~/models/post.server";
 import invariant from "tiny-invariant";
 import { useEffect, useState } from "react";
 
-// TODO 怎么把delete按钮也放进来; 两个form怎么共存? 
+// TODO 怎么把delete按钮也放进来; 两个form怎么共存?
 // TODO 是否可以在load时刷新input, 当前是使用useState实现
 type LoaderData = { post: Post };
 
@@ -37,14 +37,19 @@ type ActionData =
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.slug, `params.slug is required`);
+  const slug = params.slug;
 
   // TODO: remove me
   await new Promise((res) => setTimeout(res, 1000));
 
   const formData = await request.formData();
 
+  if (formData.get("_method") === "delete") {
+    await deletePost({ slug });
+    return redirect("/posts/admin");
+  }
+
   const title = formData.get("title");
-  const slug = params.slug;
   const markdown = formData.get("markdown");
 
   const errors: ActionData = {
@@ -77,10 +82,9 @@ export default function PostSlug() {
   const [markdown, setMarkdown] = useState(post.markdown);
 
   useEffect(() => {
-    setTitle(post.title)
-    setMarkdown(post.markdown)
-  }, [post])
-  
+    setTitle(post.title);
+    setMarkdown(post.markdown);
+  }, [post]);
 
   return (
     <main className="mx-auto max-w-4xl">
@@ -126,6 +130,17 @@ export default function PostSlug() {
             {isUpdating ? "Updating..." : "Update Post"}
           </button>
         </p>
+      </Form>
+      {/* TODO 优化删除按钮的位置 */}
+      <Form method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <button
+          type="submit"
+          className="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
+          disabled={isUpdating}
+        >
+          {isUpdating ? "Deleting..." : "Delete Post"}
+        </button>
       </Form>
     </main>
   );
