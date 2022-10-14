@@ -12,7 +12,6 @@ import type { Post } from "~/models/post.server";
 import invariant from "tiny-invariant";
 import { useEffect, useState } from "react";
 
-// TODO 怎么把delete按钮也放进来; 两个form怎么共存?
 // TODO 是否可以在load时刷新input, 当前是使用useState实现
 type LoaderData = { post: Post };
 
