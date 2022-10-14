@@ -41,15 +41,16 @@ export const action: ActionFunction = async ({ request, params }) => {
   // TODO: remove me
   await new Promise((res) => setTimeout(res, 1000));
 
-  if (request.method.toLowerCase() === "delete") {
-    await deletePost({ slug });
-    return redirect("/posts/admin");
-  }
-
   const formData = await request.formData();
 
   const title = formData.get("title");
   const markdown = formData.get("markdown");
+  const action = formData.get("action");
+
+  if (action === 'delete') {
+    await deletePost({ slug });
+    return redirect("/posts/admin");
+  }
 
   const errors: ActionData = {
     title: title ? null : "Title is required",
@@ -125,6 +126,8 @@ export default function PostSlug() {
             type="submit"
             className="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
             disabled={isUpdating}
+            name="action"
+            value="update"
           >
             {isUpdating ? "Updating..." : "Update Post"}
           </button>
@@ -133,6 +136,8 @@ export default function PostSlug() {
             className="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
             disabled={isUpdating}
             form="deleteForm"
+            name="action"
+            value="delete"
           >
             {isUpdating ? "Deleting..." : "Delete Post"}
           </button>
@@ -146,7 +151,7 @@ export default function PostSlug() {
           </button>
         </p>
       </Form>
-      <Form method="delete" id="deleteForm"></Form>
+      <Form method="post" id="deleteForm"></Form>
       <Form method="get" id="backForm" action="/posts/admin"></Form>
     </main>
   );
