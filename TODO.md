@@ -1,1 +1,3 @@
 - [ ] 'index page' in post to action?
+- [ ] 'progressive enhancement' what is it?
+- [ ] 'useState' how to prevent to use it? / replace
