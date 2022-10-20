@@ -3,6 +3,7 @@ import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   Form,
+  Link,
   useActionData,
   useLoaderData,
   useTransition,
@@ -47,7 +48,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const markdown = formData.get("markdown");
   const action = formData.get("action");
 
-  if (action === 'delete') {
+  if (action === "delete") {
     await deletePost({ slug });
     return redirect("/posts/admin");
   }
@@ -70,7 +71,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   await updatePost({ title, slug, markdown });
 
-  return {}
+  return {};
 };
 
 export default function PostSlug() {
@@ -148,6 +149,16 @@ export default function PostSlug() {
           >
             Back
           </button>
+          <Link to="csv" reloadDocument>
+            Download1
+          </Link>
+          <a
+            className="rounded bg-yellow-500 py-2 px-4 text-white
+          hover:bg-yellow-600 focus:bg-yellow-400 disabled:bg-yellow-300"
+            href={`${post.slug}.csv`}
+          >
+            Download2
+          </a>
         </p>
       </Form>
       <Form method="get" id="backForm" action="/posts/admin"></Form>
