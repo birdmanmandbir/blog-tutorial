@@ -159,6 +159,13 @@ export default function PostSlug() {
           >
             Download2
           </a>
+          <a
+            className="rounded bg-yellow-500 py-2 px-4 text-white
+          hover:bg-yellow-600 focus:bg-yellow-400 disabled:bg-yellow-300"
+            href={`${post.slug}/hello.csv`}
+          >
+            Download3
+          </a>
         </p>
       </Form>
       <Form method="get" id="backForm" action="/posts/admin"></Form>
