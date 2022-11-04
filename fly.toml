@@ -1,4 +1,4 @@
-app = "indie-stack-template-staging1"
+app = "indie-stack-template-nb1"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
